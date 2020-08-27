@@ -1,0 +1,124 @@
+body {
+	background: #526db0;
+}
+
+.page-head  {
+	display: none !important;
+}
+
+
+
+.afsa_welcome_container {
+
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	justify-content: center;
+	color: #121416;
+
+}
+
+
+
+.afsa_welcome_container .afsa_content {
+	display: flex;
+	padding-top: 40px;
+	border-radius: 16px;
+	margin: auto;
+	margin-top: 50px;
+	flex-wrap: wrap;
+	background: rgba(255,255,255,0.95);
+	transition: all 300ms ease;
+	cursor: default;
+	flex-flow: column;
+	align-items: center;
+	max-width: 1000px;
+}
+
+
+.afsa_welcome_container .afsa_header {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	flex: 1 1;
+}
+
+.afsa_welcome_container .afsa_logo_container img {
+	flex:  0 0;
+	flex-basis: 114px;
+	margin-right: 20px;
+}
+
+
+.afsa_welcome_container .afsa_title {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+
+}
+
+.afsa_welcome_container .afsa_title .afsa_label,
+.afsa_welcome_container .afsa_headline,
+.afsa_welcome_container .afsa_thanks {
+	color: #526db0;
+	font-size: 22px;
+	padding: 10px;
+	font-weight: 500;
+	flex: 1 1;
+	flex-basis: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.afsa_welcome_container .afsa_title .afsa_label {
+	font-size: 26px;
+	margin-right: 7px;
+	color: cornflowerblue;
+	position: relative;
+	top: -2px;
+}
+
+.afsa_welcome_container p {
+	font-size: 16px;
+	display: flex;
+	flex: 0 0;
+	max-width: 40%;
+	text-align: center;
+}
+
+.afsa_welcome_container p:first-of-type {
+	margin-top: 40px;
+}
+
+.afsa_welcome_container p:last-of-type {
+	margin-bottom: 40px;
+}
+
+.afsa_welcome_container .afsa_button_bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+
+.afsa_welcome_container .afsa_button {
+	font-size: 16px;
+	padding: 10px;
+	min-width: 200px; 
+        cursor: pointer;
+	text-align: center;
+	transition: all 300ms ease;
+        color: cornflowerblue
+}
+
+.afsa_welcome_container .afsa_button:hover,
+.afsa_welcome_container .afsa_button.afsa_open
+{
+	background: #428bca;
+	color: white !important;
+	border: none;
+	text-decoration: none;
+}

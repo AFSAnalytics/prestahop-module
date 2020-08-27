@@ -1,0 +1,143 @@
+body {
+
+}
+
+.page-head {
+    display: none;
+}
+
+
+
+.afsa_alert_account_id {
+    margin-top: 120px;    
+}
+
+#content {
+    padding-top: 10px !important;
+}
+
+#content .afsa_main {
+    max-width: 100%;
+    margin: 0;
+}
+
+#content .afsa_main .afsa_layer {
+    margin: 0;
+}
+
+#content .afsa_main #afsa_w_menubar {
+    margin: 10px 0 20px 0;
+}
+
+
+#content #afsa_container_widgets {
+    margin: 0;
+    max-width: calc(100% - 290px);
+}
+
+
+
+.afsa_parsed_widget {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+}
+
+.afsa_parsed_widget + .afsa_parsed_widget {
+    margin-top: 40px;
+}
+
+.afsa_col_infos {
+    display: flex;
+    flex: 0 0;
+    order:2;
+    flex-wrap: wrap;
+    max-width: min-content; 
+    margin-left: 30px;
+}
+
+.afsa_col_widgets {
+    display: flex;
+    flex: 1 0;
+    order: 1;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    max-width: 900px;
+}
+
+#afsa_w_about {
+    min-width: 260px;   
+    max-width: min-content;
+}
+
+
+
+
+/* DEMO NOTICE */
+
+
+#afsa_demo_notice {
+    background: white;
+    display: flex;
+    width: 100%;
+    padding: 5px 20px 0 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+    height: 103px;
+}
+
+
+#afsa_demo_notice .afsa_logo {
+    flex: 0 0;
+    height: 45px;
+}
+
+#afsa_demo_notice .afsa_content {
+    flex: 1 0;
+    margin-left: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+#afsa_demo_notice .afsa_content .afsa_headline {
+    color: #526db0;
+    font-size: 22px;
+    font-weight: 500;
+    flex: 0 0;
+    flex-basis: 100%;
+    margin-bottom: 7px;
+}
+
+#afsa_demo_notice .afsa_content .afsa_text {
+    flex: 1 0;
+}
+#afsa_demo_notice .afsa_content .afsa_text p {
+    margin-bottom: 3px;
+}
+
+#afsa_demo_notice .afsa_form {
+    display: flex;
+    justify-content: flex-end;
+    flex-flow: column;
+    padding-right: 30px;
+}
+
+#afsa_demo_notice .afsa_create_account {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0;
+    justify-content: space-between;
+    background: #428bca;
+    color: white;
+    border: none;
+    font-size: 18px;
+    padding: 10px;
+    min-width: 200px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 7px;
+}
+

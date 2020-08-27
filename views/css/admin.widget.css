@@ -1,0 +1,17 @@
+/* BO WIDGET */
+
+
+section.afsa_bo_dashboard {
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 0;
+    max-width: none;
+    margin-bottom: 20px;
+    border: 1px solid #d3d8db;
+    background: white;
+    position: relative !important;
+}
+
+section.afsa_bo_dashboard .afsa_widget_overview {
+    width: 100%;
+}

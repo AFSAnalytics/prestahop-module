@@ -1,0 +1,121 @@
+.afsa_intro_container img.afsa_logo {
+    height: auto;
+    top: 0px;
+    position: relative;
+    left: -7px;
+}
+
+.afsa_intro_container {
+    width: 100%;
+    margin: auto;
+    font-size: 14px;
+}
+
+.afsa_intro_container .afsa_intro_title {
+    padding: 0;
+    margin-top: 7px;
+}
+
+.afsa_intro_container .afsa_text {
+    margin-bottom: 10px;
+    color: #121416;
+}
+
+
+
+
+/* LOGO */
+
+.afsa_intro_container .afsa_logo_container {
+    flex: 1 0;
+    flex-basis: 100%;
+    padding: 10px;
+}
+
+
+/* ACCOUNT FORM */
+
+.afsa_account_cnt {
+    flex:  1 1;
+    display: flex;
+}
+
+
+
+.afsa_button,
+.afsa_button:hover
+{
+    min-width: 200px;
+    background: #428bca;
+    color: white;
+    border: none;
+    font-size: 18px;
+    padding: 10px;
+    min-width: 200px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+
+form.afsa_existing_account input[type="text"] {
+    height: 40px;
+}
+
+
+.afsa_existing_account,
+.afsa_new_account {
+    padding: 10px;
+}
+
+.afsa_text_container {
+    padding: 10px;
+
+}
+
+.afsa_account_form,
+.afsa_demo_form {
+    flex: 1 1;
+    flex-basis: 50%;
+    display: flex;
+    padding: 0;
+    flex-wrap: wrap;
+    background: white;
+    transition: all 300ms ease;
+    cursor: default;
+    justify-content: space-between;
+    margin-top: 0;
+    overflow: hidden;
+
+}
+
+
+
+
+div.afsa_create_account {
+    flex: 0 0;
+}
+
+
+body:not(.mobile) div.afsa_create_account {
+
+}
+
+
+
+
+
+
+
+/* DEMO FORM */
+
+
+
+.afsa_demo_form .afsa_headline {
+    padding: 0;
+}
+
+
+
+/* MOBILE */
