@@ -58,7 +58,6 @@ class AFSAVisitorInfos
     private function retrieveCustomerInfos($o)
     {
         $this->data = array(
-            'id' => $o->id,
             'yourid' => $o->id,
             'role' => 'customer',
             'logged' => $o->isLogged(),
@@ -92,7 +91,6 @@ class AFSAVisitorInfos
     private function retrieveEmployeeInfos($o)
     {
         $this->data = array(
-            'id' => 'ADM:' . $o->id,
             'yourid' => 'ADM:' . $o->id,
             'role' => $this->getEmployeeProfileName($o->id_profile),
             'logged' => true,
