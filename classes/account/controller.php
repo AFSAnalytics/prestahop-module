@@ -116,7 +116,11 @@ class AFSAAccountController
 
     public function renderWelcome()
     {
-        return $this->output = '<div class=afsa_welcome_container>'
+        return $this->output = '<script>'
+                . "document.cookie = 'afssetuser=0;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';\n"
+                . '</script>'
+
+                . '<div class=afsa_welcome_container>'
                 . '<div class=afsa_content>'
                 . '<div class=afsa_header>'
                 . '<div class=afsa_title>'
@@ -133,20 +137,16 @@ class AFSAAccountController
                 . '<div class=afsa_thanks>' . AFSAConfig::TR('thanks_using_afsa') . '</div>'
                 . '</div>'
                 . '<div class=afsa_button_bar>'
-
                 . '<a href="' . AFSAConfig::getConfigControllerURL() . '" '
                 . ' class="afsa_button">'
                 . AFSAConfig::tr('advanced_configuration')
                 . '</a>'
-
                 . '<a href="' . AFSAConfig::getDashboardURL() . '" '
                 . ' class="afsa_button afsa_open">'
                 . AFSAConfig::TR('open_dashboard')
                 . '</a>'
-
                 . '<a href="' . AFSARouteManager::getDashboardURL() . '" '
                 . ' class="afsa_button">' . AFSAConfig::tr('visit_afsa') . '</a>'
-
                 . '</div>'
                 . '</div>' // afsa_content
                 . '</div>'; // container

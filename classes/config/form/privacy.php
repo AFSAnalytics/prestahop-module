@@ -74,7 +74,7 @@ class AFSAConfigFormPrivacy extends AFSAConfigForm
                     'type' => 'select',
                     'label' => $this->l('Anonymize IP addresses'),
                     'name' => 'afs_analytics_ip_setting',
-                    'hint' => $this->l('Use this option to anonymize the visitor’s IP to comply with data privacy laws in some countries'),
+                    'hint' => $this->l('Use this option to anonymize the visitor’s IP'),
                     'required' => true,
                     'options' => array(
                         'query' => $this->options['afs_analytics_ip_setting'],
@@ -87,7 +87,7 @@ class AFSAConfigFormPrivacy extends AFSAConfigForm
                     'label' => $this->l('Anonymize Users Information'),
                     'name' => 'afs_analytics_anon_user_infos',
                     'values' => $radioOptions,
-                    'hint' => $this->l('Use this option to anonymize visitor Information to comply with data privacy laws in some countries'),
+                    'hint' => $this->l('Use this option to anonymize visitor Information.'),
                 ),
             ),
             'submit' => array(
