@@ -146,8 +146,8 @@ class AFSARendererDashboardView
 
         $ret = $this->renderJSData();
 
-        foreach (array('d3.min', 'c3.min', 'chart.engine', 'dashboard') as $n) {
-            $ret .= '<script src=' . AFSAConfig::getAFSAAPIHome() . '/assets/js/prestashop/current/' . $n . '.js></script>';
+        foreach (array('d3.min', 'c3.min', 'dashboard') as $n) {
+            $ret .= '<script src=' . AFSAConfig::getAFSAAPIHome() . '/assets/js/common/v2/' . $n . '.js></script>';
         }
 
         return

@@ -57,12 +57,12 @@ class AFSARendererAdminWidgetDashboard extends AFSARendererDashboardView
 
         $ret = $this->renderJSData();
 
-        foreach (array('chart.engine', 'dashboard') as $n) {
-            $ret .= '<script src=' . AFSAConfig::getAFSAAPIHome() . '/assets/js/prestashop/current/' . $n . '.js></script>';
+        foreach (array('dashboard') as $n) {
+            $ret .= '<script src=' . AFSAConfig::getAFSAAPIHome() . '/assets/js/common/v2/' . $n . '.js></script>';
         }
 
         return '<section id=afsa_dashboard class="afsa_main afsa_bo_dashboard">'
-                . $this->renderWidget('overview')
+                . $this->renderWidget('Overview')
                 . '</section>'
                 . $ret
                 . '<script src="' . AFSAConfig::getURL('/views/js/admin.widget.js') . '"></script>'

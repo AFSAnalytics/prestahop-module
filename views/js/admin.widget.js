@@ -24,19 +24,13 @@ if (typeof jQuery !== 'undefined')
 
 
         // If not displaying dashboard
-        if (typeof AFSA === 'undefined' || typeof AFSA.dashboard === 'undefined')
+        if (typeof AFSA === 'undefined' || typeof AFSA.Dashboard === 'undefined')
             return;
-
-        console.log(AFSA);
-
 
 
         AFSA.log('AFSA DB Prestashop Container');
 
         AFSA.version();
-
-
-
 
         AFSA.config().set(
                 {
@@ -64,7 +58,7 @@ if (typeof jQuery !== 'undefined')
 
         window.setTimeout(function () {
 
-            AFSA.dashboard()
+            AFSA.Dashboard()
                     .init({
                         id: 'maindb',
                         calendar: 1,

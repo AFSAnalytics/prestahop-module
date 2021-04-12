@@ -19,10 +19,7 @@ $(function () {
 
     AFSA.log('AFSA DB Prestashop Container');
 
-
     AFSA.version();
-
-
 
     AFSA.log = console.log;
 
@@ -49,15 +46,8 @@ $(function () {
     ).dump();
 
 
-
-    AFSA.themes.manager()
-            .setThemes(['main', 'dark'])
-            .load()
-            ;
-
-
     window.setTimeout(function () {
-        AFSA.dashboard.container().run();
+        AFSA.Dashboard().container().run();
     }, 1);
 
 
