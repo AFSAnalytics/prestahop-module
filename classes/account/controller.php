@@ -12,7 +12,7 @@ class AFSAAccountController
         return $this->output;
     }
 
-    // REQUEST HANLING
+    // REQUEST HANDLING
 
     private function validateState()
     {

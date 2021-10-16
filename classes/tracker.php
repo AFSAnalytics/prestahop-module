@@ -66,7 +66,7 @@ class AFSATracker
     private function shouldTrack()
     {
         return AFSAConfig::shouldTrack() &&
-                $this->validate();
+            $this->validate();
     }
 
     // CODE RENDERING
@@ -93,8 +93,8 @@ class AFSATracker
     private function aaSet($what, $value)
     {
         return 'aa("set", "' . $what . '", '
-                . (is_array($value) || is_string($value) ? json_encode($value) : "'$value'")
-                . ');';
+            . (is_array($value) || is_string($value) ? json_encode($value) : "'$value'")
+            . ');';
     }
 
     private function aaSetRaw($what, $value)
@@ -124,8 +124,8 @@ class AFSATracker
         }
 
         return 'aa("set", "setAction", "' . $action_name . '", '
-                . (is_array($data) ? json_encode($data) : "'$data'")
-                . ');';
+            . (is_array($data) ? json_encode($data) : "'$data'")
+            . ');';
     }
 
     // ADVANCED ECOM
@@ -133,15 +133,15 @@ class AFSATracker
     private function aaECAddImpression($data)
     {
         return 'aa("ec:addImpression", '
-                . json_encode($data)
-                . ');';
+            . json_encode($data)
+            . ');';
     }
 
     private function aaECAddProduct($data)
     {
         return 'aa("ec:addProduct", '
-                . json_encode($data)
-                . ');';
+            . json_encode($data)
+            . ');';
     }
 
     private function aaECAction($action, $param = [])
@@ -159,11 +159,7 @@ class AFSATracker
         return $ret . ');';
     }
 
-    /*
-     *
-     * custom
-     *
-     */
+    // CUSTOM
 
     private function aaSetOption($what, $data, $key)
     {
@@ -262,7 +258,7 @@ class AFSATracker
 
         // USER / LOGIN infos
         if (AFSAConfig::getIntOption('user_logged_tracking') == 1) {
-            $aa[] = $this->renderLogginInfo();
+            $aa[] = $this->renderLoginInfo();
             $aa[] = $this->renderUserInfo();
         }
 
@@ -273,13 +269,14 @@ class AFSATracker
         //$cms_infos = AFSAConfig::CMS() . ' ' . AFSAConfig::CMSVersion();
 
         $ret = "\n<!-- AFS Analytics V7 -"
-                . ' Module ' . AFSA_MODULE_VERSION
-                . " -->\n"
-                . "\n<script data-keepinline=\"true\" type=\"text/javascript\">"
-                . "\n(function(i,s,o,g,r,a,m){i['AfsAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','$js_url','aa');\n"
-                . implode("\n", array_filter($aa))
-                . "\n</script>\n"
-                . "<!-- [ END ] Advanced ECommerce Analytics Code by AFSAnalytics.com -->\n";
+            . ' Module ' . AFSA_MODULE_VERSION
+            . ' Mode: ' . ($this->advanced_mode ? 'advanced' : 'simple')
+            . " -->\n"
+            . "\n<script data-keepinline=\"true\" type=\"text/javascript\">"
+            . "\n(function(i,s,o,g,r,a,m){i['AfsAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','$js_url','aa');\n"
+            . implode("\n", array_filter($aa))
+            . "\n</script>\n"
+            . "<!-- [ END ] Advanced ECommerce Analytics Code by AFSAnalytics.com -->\n";
 
         return $this->log($ret);
     }
@@ -293,25 +290,24 @@ class AFSATracker
     {
         // only render if we have a valid AFSA Account number
         if (!$this->shouldTrack()) {
-            return null;
+            return '<!-- AFS Analytics Bottom Code [ !ST ] -->';
         }
 
         if (AFSAConfig::AFSAEnabled()) {
             if (empty($js = $this->renderBuffer())) {
-                AFSATools::log('empy bottom js');
+                AFSATools::log('empty bottom js');
 
-                return '';
+                return '<!-- AFS Analytics Bottom Code [ Empty ] -->';
             }
 
-            $ret = '<!-- AFS Analytics Bottom Code [ START ] -->' . "\n"
-                    . AFSATools::renderJSScript($js)
-                    . "<!-- [ END ] Advanced ECommerce Analytics Code by AFSAnalytics.com -->\n"
-            ;
+            $ret = '<!-- AFS Analytics Bottom Code [ DBG START ] -->' . "\n"
+                . AFSATools::renderJSScript($js)
+                . "<!-- [ END ] Advanced ECommerce Analytics Code by AFSAnalytics.com -->\n";
 
             return $this->log($ret);
         }
 
-        return '';
+        return '<!-- AFS Analytics Bottom Code [ !Enabled ] -->';
     }
 
     /**
@@ -331,7 +327,7 @@ class AFSATracker
         $this->buffer = array();
 
         $ret = $aa
-                . (empty($AFSA) ? null : "\nfunction onAFSATrackerLoaded() {\n$AFSA\n};");
+            . (empty($AFSA) ? null : "\nfunction onAFSATrackerLoaded() {\n$AFSA\n};");
 
         return empty($ret) ? null : $ret;
     }
@@ -342,7 +338,7 @@ class AFSATracker
      * ( see previous method  renderBuffer() )
      *
      * @param array $p js code lines
-     * @param string $type aa for basic aa instructions, AFSA for functions requring AFSA.tracker to be loaded
+     * @param string $type aa for basic aa instructions, AFSA for functions requiring AFSA.tracker to be loaded
      *
      * @return bool success
      */
@@ -361,43 +357,43 @@ class AFSATracker
         return true;
     }
 
-    /*
-     * User Info
-     *
-     *
-     */
+    // USER INFO
 
-    private function renderLogginInfo()
+    private function renderLoginInfo()
     {
-        if ($this->getVisitorInfos()->isLogged() && !isset($_COOKIE['afslogged'])) {
-            return
+        try {
+            if ($this->getVisitorInfos()->isLogged() && !isset($_COOKIE['afslogged'])) {
+                return
                     "aa('set','visitor.logged','1');\n"
                     . "var d = new Date();\n"
                     . "d.setTime(d.getTime() +(3600*1000));\n"
                     . "var expires = 'expires='+ d.toUTCString();\n"
-                    . "document.cookie='afslogged=1;'+expires+';path=/';\n"
-            ;
-        }
+                    . "document.cookie='afslogged=1;'+expires+';path=/';\n";
+            }
 
-        return null;
+            return null;
+        } catch (Exception $e) {
+            AFSATools::log('renderLoginInfo ' . $e->getMessage());
+        }
     }
 
     private function renderUserInfo()
     {
-        $infos = $this->getVisitorInfos();
+        try {
+            $infos = $this->getVisitorInfos();
 
-        if ($infos->isLogged()) {
-            if (!isset($_COOKIE['afssetuser'])) {
-                $ret = "var vdata={job:'update'};\n"
+            if ($infos->isLogged()) {
+                if (!isset($_COOKIE['afssetuser'])) {
+                    $ret = "var vdata={job:'update'};\n"
                         . "vdata.wpid='" . $infos->getID() . "';\n"; // ?WPID || YOUR ID
 
-                foreach ($infos->get() as $k => $v) {
-                    if (!in_array($k, array('id', 'logged'))) { // excluded infos
-                        $ret .= "vdata.$k='$v';\n";
+                    foreach ($infos->get() as $k => $v) {
+                        if (!in_array($k, array('id', 'logged'))) { // excluded infos
+                            $ret .= "vdata.$k='$v';\n";
+                        }
                     }
-                }
 
-                return $ret
+                    return $ret
                         . "var ol= Object.keys(vdata).length;\n"
                         . "if (ol>2){\n"
                         . "aa('set','visitor',vdata);\n"
@@ -407,22 +403,29 @@ class AFSATracker
                         . "var expires = 'expires='+ d.toUTCString();\n"
                         . "document.cookie = 'afssetuser=1;'+expires+';path=/';\n"
                         . "}\n";
+                }
             }
-        }
 
-        return null;
+            return null;
+        } catch (Exception $e) {
+            AFSATools::log('renderUserInfo ' . $e->getMessage());
+        }
     }
 
-    public function renderAdressInfo($mixed)
+    public function renderAddressInfo($mixed)
     {
-        $infos = $this->getAddressInfos($mixed);
+        try {
+            $infos = $this->getAddressInfos($mixed);
 
-        if (!empty(($data = $infos->parse()))) {
-            $data['job'] = 'update';
-            $this->assimilate(array($this->aaSet('visitor', $data), $this->aaSend('visitor')));
+            if (!empty(($data = $infos->parse()))) {
+                $data['job'] = 'update';
+                $this->assimilate(array($this->aaSet('visitor', $data), $this->aaSend('visitor')));
+            }
+
+            return null;
+        } catch (Exception $e) {
+            AFSATools::log('renderAddressInfo ' . $e->getMessage());
         }
-
-        return null;
     }
 
     public function renderCategoryInfo($arr)
@@ -451,8 +454,8 @@ class AFSATracker
     public function renderOrderInfo($mixed, $p = array())
     {
         return $this->advanced_mode ?
-                $this->renderAdvancedOrderInfo($mixed, $p) :
-                $this->renderSimpleOrderInfo($mixed);
+            $this->renderAdvancedOrderInfo($mixed, $p) :
+            $this->renderSimpleOrderInfo($mixed);
     }
 
     public function renderSimpleOrderInfo($mixed)
@@ -481,56 +484,64 @@ class AFSATracker
 
     public function renderAdvancedOrderInfo($mixed, $p)
     {
-        if (empty($mixed)) {
-            return;
+        try {
+            if (empty($mixed)) {
+                return;
+            }
+
+            $aa = array();
+            $o = new AFSAOrderInfos($mixed);
+            $data = $o->parse(AFSA_FORMAT_PRODUCT);
+
+            foreach ($data['items'] as $item) {
+                $aa[] = $this->aaECAddProduct($item);
+            }
+
+            // setting clear options to no as checkout will follow
+            $aa[] = 'aa("ec:SetOption", {"clear": "no"});';
+            $aa[] = $this->aaECAction('purchase', $data['order']);
+
+            // setting clear options to default value;
+            $aa[] = 'aa("ec:SetOption", {"clear": "yes"});';
+
+            $ret = $this->assimilate($aa); // should come before vv
+
+            if (empty($p['nostep'])) {
+                $this->renderCheckoutStep(AFSA_TRACKER_CHEKOUT_OPTION_COMPLETE, 0, null, $o->getPayment());
+                AFSAConfig::clearCheckoutSteps();
+            }
+
+            return $ret;
+        } catch (Exception $e) {
+            AFSATools::log('renderAdvancedOrderInfo ' . $e->getMessage());
         }
-
-        $aa = array();
-        $o = new AFSAOrderInfos($mixed);
-        $data = $o->parse(AFSA_FORMAT_PRODUCT);
-
-        foreach ($data['items'] as $item) {
-            $aa[] = $this->aaECAddProduct($item);
-        }
-
-        // setting clear options to no as checkout will follow
-        $aa[] = 'aa("ec:SetOption", {"clear": "no"});';
-        $aa[] = $this->aaECAction('purchase', $data['order']);
-
-        // setting clear options to default value;
-        $aa[] = 'aa("ec:SetOption", {"clear": "yes"});';
-
-        $ret = $this->assimilate($aa); // should come before vv
-
-        if (empty($p['nostep'])) {
-            $this->renderCheckoutStep(AFSA_TRACKER_CHEKOUT_OPTION_COMPLETE, 0, null, $o->getPayment());
-            AFSAConfig::clearCheckoutSteps();
-        }
-
-        return $ret;
     }
 
     public function renderRefundedOrder($order_id, $products = null)
     {
-        if (!$this->advanced_mode) {
-            return null;
-        }
-
-        $aa = array();
-
-        if (!empty($products)) {
-            foreach ($products as $product) {
-                $aa[] = $this->aaAddProduct(array(
-                    'id' => $product['sku'],
-                    'quantity' => $product['quantity'],
-                ));
+        try {
+            if (!$this->advanced_mode) {
+                return null;
             }
+
+            $aa = array();
+
+            if (!empty($products)) {
+                foreach ($products as $product) {
+                    $aa[] = $this->aaAddProduct(array(
+                        'id' => $product['sku'],
+                        'quantity' => $product['quantity'],
+                    ));
+                }
+            }
+
+            $aa[] = $this->aaSetAction('refund', json_encode(array('id' => $order_id)));
+            $aa[] = $this->aaSend('refund');
+
+            return $this->assimilate($aa);
+        } catch (Exception $e) {
+            AFSATools::log('renderRefundedOrder ' . $e->getMessage());
         }
-
-        $aa[] = $this->aaSetAction('refund', json_encode(array('id' => $order_id)));
-        $aa[] = $this->aaSend('refund');
-
-        return $this->assimilate($aa);
     }
 
     // CHECKOUT
@@ -544,56 +555,64 @@ class AFSATracker
 
     private function renderCheckoutActionParams($step, $option = null)
     {
-        $ret = array(
-            'step' => $step,
-        );
-        if (!empty($option)) {
-            $ret['option'] = $option;
-        }
+        try {
+            $ret = array(
+                'step' => $step,
+            );
+            if (!empty($option)) {
+                $ret['option'] = $option;
+            }
 
-        return $ret;
+            return $ret;
+        } catch (Exception $e) {
+            AFSATools::log('renderCheckoutActionParams ' . $e->getMessage());
+        }
     }
 
-//
-//    public function renderCheckoutOption($step, $option = null) {
-//        if (!$this->advanced_mode)
-//            return null;
-//
-//        $this->assimilate(array(
-//            $this->aaECAction('checkout', $this->renderCheckoutActionParams($step, $option)),
-//                )
-//        );
-//    }
+    //
+    //    public function renderCheckoutOption($step, $option = null) {
+    //        if (!$this->advanced_mode)
+    //            return null;
+    //
+    //        $this->assimilate(array(
+    //            $this->aaECAction('checkout', $this->renderCheckoutActionParams($step, $option)),
+    //                )
+    //        );
+    //    }
 
     public function renderCheckoutStep($step, $cart_id, $products, $option = null)
     {
-        if (!$this->advanced_mode) {
-            return null;
-        }
-
-        $aa = array();
-
-        $last_step = AFSAConfig::getLastCheckoutStepForCart($cart_id);
-        if ($last_step > $step) {
-            // Ignoring duplicate step
-            return;
-        }
-
-        AFSAConfig::setCheckoutStepForCart($cart_id, $step);
-
-        // only add products on first step
-        if ($step == AFSA_TRACKER_CHEKOUT_OPTION_INIT) {
-            $infos = new AFSAProductInfos();
-            $p_data = $infos->parseProducts($products, null, AFSA_FORMAT_PRODUCT);
-
-            foreach ($p_data as $data) {
-                $aa[] = $this->aaECAddProduct($data);
+        try {
+            if (!$this->advanced_mode) {
+                return null;
             }
+
+            $aa = array();
+
+            $last_step = AFSAConfig::getLastCheckoutStepForCart($cart_id);
+            if ($last_step > $step) {
+                // Ignoring duplicate step
+                return;
+            }
+
+            AFSAConfig::setCheckoutStepForCart($cart_id, $step);
+
+            // only add products on first step
+            if ($step == AFSA_TRACKER_CHEKOUT_OPTION_INIT) {
+                $infos = new AFSAProductInfos();
+                $p_data = $infos->parseProducts($products, null, AFSA_FORMAT_PRODUCT);
+
+                foreach ($p_data as $data) {
+                    $aa[] = $this->aaECAddProduct($data);
+                }
+            }
+
+            $aa[] = $this->aaECAction('checkout', $this->renderCheckoutActionParams($step, $option));
+
+            return $this->assimilate($aa);
+        } catch (Exception $e) {
+            AFSATools::log('renderCheckoutStep ' . $e->getMessage());
         }
-
-        $aa[] = $this->aaECAction('checkout', $this->renderCheckoutActionParams($step, $option));
-
-        return $this->assimilate($aa);
     }
 
     // CART
@@ -607,11 +626,15 @@ class AFSATracker
      */
     public function renderAddToCart($product_data)
     {
-        if (!$this->advanced_mode) {
-            return null;
-        }
+        try {
+            if (!$this->advanced_mode) {
+                return null;
+            }
 
-        return $this->assimilate(array($this->aaECAddProduct($product_data), $this->aaECAction('add')));
+            return $this->assimilate(array($this->aaECAddProduct($product_data), $this->aaECAction('add')));
+        } catch (Exception $e) {
+            AFSATools::log('renderAddToCart ' . $e->getMessage());
+        }
     }
 
     /**
@@ -623,11 +646,15 @@ class AFSATracker
      */
     public function renderRemoveFromCart($product_data)
     {
-        if (!$this->advanced_mode) {
-            return null;
-        }
+        try {
+            if (!$this->advanced_mode) {
+                return null;
+            }
 
-        return $this->assimilate(array($this->aaECAddProduct($product_data), $this->aaECAction('remove')));
+            return $this->assimilate(array($this->aaECAddProduct($product_data), $this->aaECAction('remove')));
+        } catch (Exception $e) {
+            AFSATools::log('renderRemoveFromCart ' . $e->getMessage());
+        }
     }
 
     // PRODUCT
@@ -643,42 +670,54 @@ class AFSATracker
      */
     public function renderProductsImpression($products, $src = null)
     {
-        if (!$this->advanced_mode) {
-            return null;
-        }
+        try {
+            if (!$this->advanced_mode) {
+                return null;
+            }
 
-        $aa = array();
+            $aa = array();
 
-        $infos = new AFSAProductInfos();
-        $p_data = $infos->parseProducts($products,
+            $infos = new AFSAProductInfos();
+            $p_data = $infos->parseProducts(
+                $products,
                 array(
-                    'list' => $src ? $src : AFSAConfig::getLastProductList(), ),
+                    'list' => $src ? $src : AFSAConfig::getLastProductList(),
+                ),
                 AFSA_FORMAT_IMPRESSION
-        );
+            );
 
-        foreach ($p_data as $data) {
-            $aa[] = $this->aaECAddImpression($data);
+            foreach ($p_data as $data) {
+                $aa[] = $this->aaECAddImpression($data);
+            }
+
+            print_r($aa);
+
+            return $this->assimilate($aa);
+        } catch (Exception $e) {
+            AFSATools::log('renderProductsImpression ' . $e->getMessage());
         }
-
-        return $this->assimilate($aa);
     }
 
     public function renderProductDetailView($product)
     {
-        if (!$this->advanced_mode) {
-            return null;
+        try {
+            if (!$this->advanced_mode) {
+                return null;
+            }
+
+            $aa = array();
+            $infos = new AFSAProductInfos();
+            $p_data = $infos->parseProduct($product, null, AFSA_FORMAT_PRODUCT);
+            unset($p_data['url']);
+
+            $aa[] = $this->aaECAddProduct($p_data);
+
+            $aa[] = $this->aaECAction('detail', array('list' => AFSAConfig::getLastProductList()));
+
+            return $this->assimilate($aa); //code...
+        } catch (Exception $e) {
+            AFSATools::log('renderProductDetailView ' . $e->getMessage());
         }
-
-        $aa = array();
-        $infos = new AFSAProductInfos();
-        $p_data = $infos->parseProduct($product, null, AFSA_FORMAT_PRODUCT);
-        unset($p_data['url']);
-
-        $aa[] = $this->aaECAddProduct($p_data);
-
-        $aa[] = $this->aaECAction('detail', array('list' => AFSAConfig::getLastProductList()));
-
-        return $this->assimilate($aa);
     }
 
     /**
@@ -693,29 +732,36 @@ class AFSATracker
      */
     public function renderProductsClick($products, $src)
     {
-        if (!$this->advanced_mode) {
-            return null;
-        }
+        try {
+            if (!$this->advanced_mode) {
+                return null;
+            }
 
-        $aa = array();
+            $aa = array();
 
-        //need to make sure that products
-        //contains url for product detail ( as $p['link'])
+            //need to make sure that products
+            //contains url for product detail ( as $p['link'])
 
-        $infos = new AFSAProductInfos();
-        $p_data = $infos->parseProducts($products,
+            $infos = new AFSAProductInfos();
+            $p_data = $infos->parseProducts(
+                $products,
                 array(
-                    'list' => $src, ),
+                    'list' => $src,
+                ),
                 AFSA_FORMAT_PRODUCT,
                 array(
-                    'add_url' => 1, )
-        );
+                    'add_url' => 1,
+                )
+            );
 
-        foreach ($p_data as $data) {
-            $aa[] = 'AFSA.tracker.listenProductClick(' . json_encode($data) . ');';
+            foreach ($p_data as $data) {
+                $aa[] = 'AFSA.tracker.listenProductClick(' . json_encode($data) . ');';
+            }
+
+            return $this->assimilate($aa, 'AFSA');
+        } catch (Exception $e) {
+            AFSATools::log('renderProductsClick ' . $e->getMessage());
         }
-
-        return $this->assimilate($aa, 'AFSA');
     }
 
     /**
@@ -724,24 +770,30 @@ class AFSATracker
      *
      * @return string rendered js code
      */
-    public function renderProductClickByHttpReferal($products, $src = 'detail')
+    public function renderProductClickByHttpReferral($products, $src = 'detail')
     {
-        if (!$this->advanced_mode) {
-            return null;
-        }
+        try {
+            if (!$this->advanced_mode) {
+                return null;
+            }
 
-        $infos = new AFSAProductInfos();
-        $p_data = $infos->parseProducts($products,
+            $infos = new AFSAProductInfos();
+            $p_data = $infos->parseProducts(
+                $products,
                 array(
-                    'list' => $src, ),
+                    'list' => $src,
+                ),
                 AFSA_FORMAT_PRODUCT
-        );
-        $aa = array();
-        foreach ($p_data as $data) {
-            $aa[] = 'AFSA.tracker.sendProductClickByHttpReferal(' . json_encode($data) . ');';
-        }
+            );
+            $aa = array();
+            foreach ($p_data as $data) {
+                $aa[] = 'AFSA.tracker.sendProductClickByHttpReferral(' . json_encode($data) . ');';
+            }
 
-        return $this->assimilate($aa, 'AFSA');
+            return $this->assimilate($aa, 'AFSA');
+        } catch (Exception $e) {
+            AFSATools::log('renderProductClickByHttpReferral ' . $e->getMessage());
+        }
     }
 
     // DEBUG
@@ -749,8 +801,8 @@ class AFSATracker
     private function getLogFilename()
     {
         return _PS_MODULE_DIR_ . '/afsanalytics/logs/'
-                . (AFSAConfig::isAjax() ? 'ajax/' : '')
-                . time() . '.' . AFSAConfig::getPageName() . '.txt';
+            . (AFSAConfig::isAjax() ? 'ajax/' : '')
+            . time() . '.' . AFSAConfig::getPageName() . '.txt';
     }
 
     private function saveLog()
@@ -781,13 +833,12 @@ class AFSATracker
         }
 
         $str .= is_array($data) ?
-                json_encode($data, JSON_PRETTY_PRINT) :
-                $data;
+            json_encode($data, JSON_PRETTY_PRINT) :
+            $data;
 
         $this->_log .= empty($title) ?
-                "\n$str\n" :
-                "\n" . Tools::strtoupper($title) . "\n----\n$str\n"
-        ;
+            "\n$str\n" :
+            "\n" . Tools::strtoupper($title) . "\n----\n$str\n";
 
         return $data;
     }

@@ -12,7 +12,7 @@ AFSA.tracker = {
 
     },
 
-    sendProductClickByHttpReferal: function (p) {
+    sendProductClickByHttpReferral: function (p) {
 
     }
 

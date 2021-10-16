@@ -35,7 +35,7 @@ class AFSCartInfos
     }
 
     /**
-     * Proccess card items that have been saved to DB
+     * Process card items that have been saved to DB
      * and render js for added / deleted products
      */
     public function renderBottomJS()

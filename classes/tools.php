@@ -33,8 +33,20 @@ class AFSATools
     public static function renderJSScript($js)
     {
         return empty($js) ?
-                '' :
-                "<script>\n$js\n</script>\n";
+            '' :
+            "<script>\n$js\n</script>\n";
+    }
+
+    private static function renderDebugMessage($str, $data)
+    {
+        $d_str = ' ';
+        if ($data) {
+            $d_str .= is_array($data) ?
+                json_encode($data, JSON_PRETTY_PRINT) :
+                $data;
+        }
+
+        return $str . $d_str;
     }
 
     public static function log($str, $data = null)
@@ -43,13 +55,21 @@ class AFSATools
             return;
         }
 
-        $d_str = ' ';
-        if ($data) {
-            $d_str .= is_array($data) ?
-                    json_encode($data, JSON_PRETTY_PRINT) :
-                    $data;
+        $msg = static::renderDebugMessage($str, $data);
+        error_log($msg);
+
+        return $msg;
+    }
+
+    public static function forcedLog($str, $data = null)
+    {
+        if (!AFSAConfig::isDebug()) {
+            return;
         }
-        error_log($str . $d_str);
+
+        $msg = static::renderDebugMessage($str, $data);
+        error_log($msg);
+        echo '<pre>' . $msg . '</pre>';
     }
 
     public static function jsEscape($string)
@@ -86,8 +106,8 @@ class AFSATools
         $path = empty($parts['path']) ? '' : $parts['path'];
 
         $base_url = empty($parts['scheme']) ?
-                $path :
-                $parts['scheme'] . '://' . $parts['host'] . $path;
+            $path :
+            $parts['scheme'] . '://' . $parts['host'] . $path;
 
         // Retrieve current args
         if (!empty($parts['query'])) {

@@ -85,7 +85,7 @@ class AFSAProductInfos
      * @param array $p product infos
      * @param int $position
      * @param Currenct $currency
-     * @param string $format item format (transcation, cart list, etc...)
+     * @param string $format item format (transaction, cart list, etc...)
      *
      * @return array
      */
@@ -93,6 +93,10 @@ class AFSAProductInfos
     {
         if (empty($context = $this->getContext())) {
             return;
+        }
+
+        if ($p instanceof Product) {
+            $p = (array) $p;
         }
 
         // Gathering DATA

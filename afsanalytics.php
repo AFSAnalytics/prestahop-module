@@ -16,14 +16,14 @@
  * DISCLAIMER
  *
  *  @author    AFSAnalytics.com Dev Team <devteam@afsanalytics.com>
- *  @copyright 2020 AFSAnalytics
+ *  @copyright 2021 AFSAnalytics
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-define('AFSA_MODULE_VERSION', '1.0.2');
+define('AFSA_MODULE_VERSION', '1.0.3');
 
 include_once 'classes/config/main.php';
 include_once 'classes/db.php';
@@ -46,7 +46,7 @@ class AFSAnalytics extends Module
     {
         $this->name = 'afsanalytics'; // do not change
         $this->tab = 'analytics_stats';
-        $this->version = '1.0.2'; // must be a string
+        $this->version = '1.0.3'; // must be a string
         $this->author = 'AFSAnalytics';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array(
@@ -87,8 +87,7 @@ class AFSAnalytics extends Module
             $hookHeader = 'header';
         }
 
-        foreach (
-        array(
+        foreach (array(
             $hookHeader,
             'displayHome',
             'displayFooterProduct',
@@ -151,35 +150,37 @@ class AFSAnalytics extends Module
 
     public function buildDics()
     {
-        AFSAConfig::importTR(array('oauth_invalid_state' => $this->l('Autorization was not provided by an official AFS Analytics server'),
-            'no_account_set' => $this->l('No Account was set'),
-            'please_set_account_id' => $this->l('Please enter a valid AFS Analytics website ID on Module configuration page.'),
-            'my_account_id' => $this->l('My Website ID'),
-            'link_existing_account' => $this->l('Link Existing Account'),
-            'create_account' => $this->l('Create Account'),
-            'launch_demo' => $this->l('Launch Demo'),
-            'create_your_own_account' => $this->l('Create your very own Account'),
-            'demo_account' => $this->l('Demo Account'),
-            'existing_account_help' => $this->l('If you already possess an AFS analytics account, enter your Website ID below, click on "Link website", and you are done.'),
-            'create_new_account_help' => $this->l('Or start a free 15 days trial and start experiencing without waiting the full power of our advanced ECommerce analytics solution. No credit card required'),
-            'create_new_account_help_more' => $this->l(''),
-            'live_demo' => $this->l('Live Demo'),
-            'live_demo_help' => $this->l('Experience the full power of AFS Analytics with our live demo. No Account required.'),
-            'configure_account' => $this->l('Configure your AFS Analytics module in one click'),
-            'start_free_trial' => $this->l('Start free trial'),
-            'demo_notice_title' => $this->l('Live Demo'),
-            'demo_notice_help' => $this->l('This dashboard is displaying in real time 0the activity of a test website powered by prestahop.'),
-            'demo_notice_help_more' => $this->l('To monitor your own prestahop installation, you will have to open your own account.'),
-            'congratulations' => $this->l('Congratulations'),
-            'module_configured' => $this->l('Your AFS Analytics module is now fully configured.'),
-            'module_working' => $this->l('Traffic and activity on your shop is now monitored in real time. Detailled statistics will begin to appear in your module dashboard as soon as new visitors will be visiting it'),
-            'account_id_available' => $this->l('You can retrieve your AFS Analytics Website ID at any time by visiting this module configuration page.'),
-            'thanks_using_afsa' => $this->l('Thanks for using AFS analytics.'),
-            'advanced_configuration' => $this->l('Advanced configuration'),
-            'visit_afsa' => $this->l('Visit AFSAnalytics.com'),
-            'open_dashboard' => $this->l('Open Dashboard'),
+        AFSAConfig::importTR(
+            array(
+                'oauth_invalid_state' => $this->l('Autorization was not provided by an official AFS Analytics server'),
+                'no_account_set' => $this->l('No Account was set'),
+                'please_set_account_id' => $this->l('Please enter a valid AFS Analytics website ID on Module configuration page.'),
+                'my_account_id' => $this->l('My Website ID'),
+                'link_existing_account' => $this->l('Link Existing Account'),
+                'create_account' => $this->l('Create Account'),
+                'launch_demo' => $this->l('Launch Demo'),
+                'create_your_own_account' => $this->l('Create your very own Account'),
+                'demo_account' => $this->l('Demo Account'),
+                'existing_account_help' => $this->l('If you already possess an AFS analytics account, enter your Website ID below, click on "Link website", and you are done.'),
+                'create_new_account_help' => $this->l('Or start a free 15 days trial and start experiencing without waiting the full power of our advanced ECommerce analytics solution. No credit card required'),
+                'create_new_account_help_more' => $this->l(''),
+                'live_demo' => $this->l('Live Demo'),
+                'live_demo_help' => $this->l('Experience the full power of AFS Analytics with our live demo. No Account required.'),
+                'configure_account' => $this->l('Configure your AFS Analytics module in one click'),
+                'start_free_trial' => $this->l('Start free trial'),
+                'demo_notice_title' => $this->l('Live Demo'),
+                'demo_notice_help' => $this->l('This dashboard is displaying in real time 0the activity of a test website powered by prestahop.'),
+                'demo_notice_help_more' => $this->l('To monitor your own prestahop installation, you will have to open your own account.'),
+                'congratulations' => $this->l('Congratulations'),
+                'module_configured' => $this->l('Your AFS Analytics module is now fully configured.'),
+                'module_working' => $this->l('Traffic and activity on your shop is now monitored in real time. Detailled statistics will begin to appear in your module dashboard as soon as new visitors will be visiting it'),
+                'account_id_available' => $this->l('You can retrieve your AFS Analytics Website ID at any time by visiting this module configuration page.'),
+                'thanks_using_afsa' => $this->l('Thanks for using AFS analytics.'),
+                'advanced_configuration' => $this->l('Advanced configuration'),
+                'visit_afsa' => $this->l('Visit AFSAnalytics.com'),
+                'open_dashboard' => $this->l('Open Dashboard'),
                 // 'days_trends_help' => $this->l('Days Trends Summary will start to be displayed here as soon as you open the embedded')
-                )
+            )
         );
     }
 
@@ -280,15 +281,14 @@ class AFSAnalytics extends Module
         $g_fonts = AFSAConfig::get('gfonts');
         if (!empty($g_fonts)) {
             $ret .= '<link href="https://fonts.googleapis.com/css?family='
-                    . $g_fonts . '" rel="stylesheet" type="text/css">';
+                . $g_fonts . '" rel="stylesheet" type="text/css">';
         }
 
         return $ret
-                . "\n" . AFSATracker::get()->render()
-                . "\n" . '<script>'
-                . 'var afsa_plugin_base_url="' . AFSAConfig::getUrl()
-                . '";</script>'
-        ;
+            . "\n" . AFSATracker::get()->render()
+            . "\n" . '<script>'
+            . 'var afsa_plugin_base_url="' . AFSAConfig::getUrl()
+            . '";</script>';
     }
 
     // HEADERS
@@ -314,8 +314,8 @@ class AFSAnalytics extends Module
         $this->_onBeforeDisplayedHeader();
 
         return "\n"
-                //. '<script type="text/javascript" src="' . $this->_path . 'views/js/AFSA.tracker.js"></script>'
-                . AFSATracker::get()->render();
+            //. '<script type="text/javascript" src="' . $this->_path . 'views/js/AFSA.tracker.js"></script>'
+            . AFSATracker::get()->render();
     }
 
     // PS > 1.7
@@ -334,15 +334,15 @@ class AFSAnalytics extends Module
     public function hookFooter($params)
     {
         return _PS_VERSION_ < 1.7 ?
-                $this->_hookFooterCommon() :
-                null;
+            $this->_hookFooterCommon() :
+            null;
     }
 
     public function hookDisplayBeforeBodyClosingTag()
     {
         return _PS_VERSION_ >= 1.7 ?
-                $this->_hookFooterCommon() :
-                null;
+            $this->_hookFooterCommon() :
+            null;
     }
 
     /**
@@ -480,12 +480,12 @@ class AFSAnalytics extends Module
         }
 
         if (!empty($order)) {
-            if (// order by current customer
-                    $order->id_customer == $this->context->cookie->id_customer
-                    // less than one day old
-                    && strtotime('+1 day', strtotime($order->date_add)) > time()
-                    // not already in db
-                    && !$db->wasOrderProcessed($order->id, $this->getShopID())
+            if ( // order by current customer
+                $order->id_customer == $this->context->cookie->id_customer
+                // less than one day old
+                && strtotime('+1 day', strtotime($order->date_add)) > time()
+                // not already in db
+                && !$db->wasOrderProcessed($order->id, $this->getShopID())
             ) {
                 // track order and save it in db
                 $tracker->renderOrderInfo($order);
@@ -494,7 +494,7 @@ class AFSAnalytics extends Module
 
                 $address_id = $order->id_address_invoice;
                 if (!empty($address_id)) {
-                    $tracker->renderAdressInfo($address_id);
+                    $tracker->renderAddressInfo($address_id);
                 }
             }
         }
@@ -604,10 +604,10 @@ class AFSAnalytics extends Module
             $carrier_name = Db::getInstance()->getValue('SELECT name FROM `' . _DB_PREFIX_ . 'carrier` WHERE id_carrier = ' . (int) $params['cart']->id_carrier);
             AFSATracker::get()->renderCheckoutStep(AFSA_TRACKER_CHEKOUT_OPTION_CARRIER, $cart_id, null, $carrier_name);
 
-//            $db = AFSADB::get();
-//            $db->addCartData(
-//                    $this->getCartID(), $this->getShopID(), AFSATracker::get()->renderCheckoutOption(2, $carrier_name)
-//            );
+            //            $db = AFSADB::get();
+            //            $db->addCartData(
+            //                    $this->getCartID(), $this->getShopID(), AFSATracker::get()->renderCheckoutOption(2, $carrier_name)
+            //            );
         }
     }
 
@@ -623,7 +623,7 @@ class AFSAnalytics extends Module
             $tracker->renderProductDetailView($product);
 
             if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $_SERVER['HTTP_HOST']) > 0) {
-                $tracker->renderProductClickByHttpReferal(array($product));
+                $tracker->renderProductClickByHttpReferral(array($product));
             }
         }
     }
