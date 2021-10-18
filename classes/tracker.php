@@ -300,7 +300,7 @@ class AFSATracker
                 return '<!-- AFS Analytics Bottom Code [ Empty ] -->';
             }
 
-            $ret = '<!-- AFS Analytics Bottom Code [ DBG START ] -->' . "\n"
+            $ret = '<!-- AFS Analytics Bottom Code [ START ] -->' . "\n"
                 . AFSATools::renderJSScript($js)
                 . "<!-- [ END ] Advanced ECommerce Analytics Code by AFSAnalytics.com -->\n";
 
@@ -689,8 +689,6 @@ class AFSATracker
             foreach ($p_data as $data) {
                 $aa[] = $this->aaECAddImpression($data);
             }
-
-            print_r($aa);
 
             return $this->assimilate($aa);
         } catch (Exception $e) {

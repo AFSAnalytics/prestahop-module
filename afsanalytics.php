@@ -23,7 +23,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-define('AFSA_MODULE_VERSION', '1.0.3');
+define('AFSA_MODULE_VERSION', '1.0.4');
 
 include_once 'classes/config/main.php';
 include_once 'classes/db.php';
@@ -46,7 +46,7 @@ class AFSAnalytics extends Module
     {
         $this->name = 'afsanalytics'; // do not change
         $this->tab = 'analytics_stats';
-        $this->version = '1.0.3'; // must be a string
+        $this->version = '1.0.4'; // must be a string
         $this->author = 'AFSAnalytics';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array(
@@ -425,8 +425,13 @@ class AFSAnalytics extends Module
         }
 
         // Render listed product impression / click
-        $listing = $this->context->smarty->getTemplateVars('listing');
-        $listed_products = $listing['products'];
+        $listed_products = null;
+        if (_PS_VERSION_ >= 1.7) {
+            $listing = $this->context->smarty->getTemplateVars('listing');
+            $listed_products = $listing['products'] ?? null;
+        } else {
+            $listed_products = $this->context->smarty->getTemplateVars('products');
+        }
 
         if (!empty($listed_products) && $controller_name != 'index') {
             if (empty($ignore_click)) {

@@ -142,6 +142,7 @@ class AFSAConfigFormMain extends AFSAConfigForm
                     'name' => 'afs_analytics_display_admin_summary',
                     'values' => $radioOptions,
                 ),
+
                 array(
                     'type' => 'select',
                     'label' => $this->l('Page Name Attribution'),

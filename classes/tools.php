@@ -63,6 +63,7 @@ class AFSATools
 
     public static function forcedLog($str, $data = null)
     {
+        /*
         if (!AFSAConfig::isDebug()) {
             return;
         }
@@ -70,6 +71,7 @@ class AFSATools
         $msg = static::renderDebugMessage($str, $data);
         error_log($msg);
         echo '<pre>' . $msg . '</pre>';
+        */
     }
 
     public static function jsEscape($string)

@@ -1,9 +1,6 @@
 <?php
 
-/*
- * Manage Configuration page forms
- *
- */
+// Manage Configuration page forms
 
 include_once 'form.php';
 
@@ -11,6 +8,7 @@ include_once 'main.php';
 include_once 'autotrack.php';
 include_once 'privacy.php';
 include_once 'GDPR.php';
+include_once 'dashboard.php';
 
 class AFSAConfigFormManager
 {
@@ -19,11 +17,13 @@ class AFSAConfigFormManager
         'AutoTrack' => null,
         'Privacy' => null,
         'GDPR' => null,
+        'Dashboard' => null,
     );
 
     public function __construct($module)
     {
         $this->module = &$module;
+        $this->account = AFSAConfig::getAccountID();
     }
 
     private function getForm($id)
@@ -46,11 +46,16 @@ class AFSAConfigFormManager
                 case 'GDPR':
                     $form = new AFSAConfigFormGDPR($this->module);
                     break;
+
+                case 'Dashboard':
+                    $form = (int) $this->account ?
+                        new AFSAConfigFormDashboard($this->module) :
+                        null;
+                    break;
             }
 
             if (!$form) {
-                echo $id;
-                exit;
+                return null;
             }
 
             return $this->form[$id] = $form;
@@ -65,7 +70,9 @@ class AFSAConfigFormManager
             if (empty($f)) {
                 $f = $this->getForm($id);
             }
-            $f->install();
+            if ($f) {
+                $f->install();
+            }
         }
     }
 
@@ -87,8 +94,10 @@ class AFSAConfigFormManager
             if (empty($f)) {
                 $f = $this->getForm($id);
             }
-            $ret .= $f->onSubmit()
+            if ($f) {
+                $ret .= $f->onSubmit()
                     . $f->render();
+            }
         }
 
         return $ret;

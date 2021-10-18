@@ -42,12 +42,6 @@ abstract class AFSAConfigForm
         return $module->displayConfirmation($module->l(empty($msg) ? 'Settings updated' : $msg));
     }
 
-    /*
-     *
-     *
-     *
-     */
-
     protected function getSubmitName()
     {
         return 'submitConfig' . $this->form_id . $this->module->name;
