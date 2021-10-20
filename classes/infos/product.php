@@ -353,7 +353,7 @@ class AFSAProductInfos
         $product = new Product($id_product, false, $id_lang);
 
         $img = $product->getCover($product->id);
-        $image_type = ImageType::getFormattedName('home');
+        $image_type = static::getFormattedName('home');
 
         $img_link = isset($product->link_rewrite) ?
                 $product->link_rewrite :
@@ -366,5 +366,12 @@ class AFSAProductInfos
             ),
             'name' => $product->name,
         );
+    }
+
+    private static function getFormattedName($name)
+    {
+        return method_exists('ImageType', 'getFormattedName') ?
+         ImageType::getFormattedName($name) :
+         ImageType::getFormatedName($name);
     }
 }

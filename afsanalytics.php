@@ -23,7 +23,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-define('AFSA_MODULE_VERSION', '1.0.4');
+define('AFSA_MODULE_VERSION', '1.0.5');
 
 include_once 'classes/config/main.php';
 include_once 'classes/db.php';
@@ -46,7 +46,7 @@ class AFSAnalytics extends Module
     {
         $this->name = 'afsanalytics'; // do not change
         $this->tab = 'analytics_stats';
-        $this->version = '1.0.4'; // must be a string
+        $this->version = '1.0.5'; // must be a string
         $this->author = 'AFSAnalytics';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array(

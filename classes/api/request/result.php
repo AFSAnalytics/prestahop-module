@@ -29,9 +29,8 @@ class AFSAApiRequestResult
     private function getDB()
     {
         return $this->db ?
-                $this->db :
-                $this->db = AFSADB::get()
-        ;
+            $this->db :
+            $this->db = AFSADB::get();
     }
 
     public function render()
@@ -55,16 +54,21 @@ class AFSAApiRequestResult
 
         // not rendering context infos if in demo mode
 
-        return
-                AFSAConfig::isDemo() ?
+        try {
+            return  AFSAConfig::isDemo() ?
                 $result :
                 $this->renderEnhancedInfos($result);
+        } catch (\Throwable $th) {
+            $result['_error'] = $th->getMessage();
+        }
+
+        return $result;
     }
 
     public function parseError($e)
     {
         switch ($e) {
-            // Invalid token
+                // Invalid token
             case 'access_denied':
                 $this->request->logOut();
                 break;
@@ -153,8 +157,8 @@ class AFSAApiRequestResult
         }
 
         $known_ids = empty($context['visitors']) ?
-                [] :
-                $context['visitors'];
+            [] :
+            $context['visitors'];
 
         $result_ids = array_unique($this->visitor_ids);
 
@@ -188,8 +192,8 @@ class AFSAApiRequestResult
         }
 
         $known_skus = empty($context['products']) ?
-                [] :
-                $context['products'];
+            [] :
+            $context['products'];
 
         $result_skus = array_unique($this->product_skus);
 
