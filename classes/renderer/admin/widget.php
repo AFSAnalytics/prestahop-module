@@ -33,12 +33,13 @@ class AFSARendererAdminWidget
             return $rdr->render();
         }
 
-        return '<section id=afsa_dashboard class="afsa_intro_container afsa_bo_dashboard">'
-                . AFSAAccountFormRenderer::renderAccountForm()
-                . AFSAAccountFormRenderer::renderDemoForm()
-                . '</section>'
-                . '<script src="' . AFSAConfig::getURL('/views/js/admin.widget.js') . '"></script>'
-                . '<script src="' . AFSAConfig::getURL('/views/js/back.office.js') . '"></script>'
-        ;
+        $data = AFSAAccountFormRenderer::getTemplateData();
+        $data['url']['js_widget'] = AFSAConfig::getURL('/views/js/admin.widget.js');
+        $data['url']['js_bo'] = AFSAConfig::getURL('/views/js/back.office.js');
+
+        return AFSATools::renderTemplate(
+            'intro.bo.tpl',
+            $data
+        );
     }
 }

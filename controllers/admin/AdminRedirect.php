@@ -28,24 +28,16 @@ class AdminRedirectController extends ModuleAdminController
 
     public function renderView()
     {
-        $u = &$this->dest['url'];
-        $link = $this->l($this->dest['label']);
-
-        return
-                '<div style="text-align:center" class="wait_notice" id="afsa_browser" data-to="' . $u . '">'
-                . '<p><b>'
-                . 'Chargement en cours AFS Analytics. Merci de patienter quelques instants. '
-                // . $this->l('Please be patient, AFS Analytics is loading ...')
-                . '</b></p>'
-                . '</div>'
-
-                . '<div style="text-align:center" class="wait_notice"><p>'
-                . '<a href="' . $u . '" target="_blank">' . $link . '</a>'
-                . '</p></div>'
-
-                . "\n<script type='text/javascript'>\n"
-                . "window.location.href='$u';\n"
-                . "</script>\n"
-        ;
+        try {
+            return  AFSATools::renderTemplate(
+                'redirect.tpl',
+                [
+                    'url' => $this->dest['url'],
+                    'link' => $this->l($this->dest['label']),
+                ]
+            );
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 }

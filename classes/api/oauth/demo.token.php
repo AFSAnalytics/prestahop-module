@@ -67,18 +67,4 @@ class AFSAOAuthDemoToken
     {
         return 9999;
     }
-
-    /*
-        public function dump()
-        {
-            AFSATools::log(
-                    __METHOD__, array_merge(
-                            $this->getData(), [
-                'sec' => $this->secondsBeforeExpiration(),
-                'hours' => $this->hoursBeforeExpiration(),
-                'days' => $this->daysBeforeExpiration(),
-                'isExpired' => $this->isExpired(),
-            ]));
-        }
-        */
 }

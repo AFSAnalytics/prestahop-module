@@ -172,7 +172,7 @@ class AFSAApiRequestResult
         AFSATools::log('CTX unknown', ['D' => $ids, 'R' => $result_ids, 'K' => $known_ids]);
 
         $ret = array();
-        $items = $this->getDB()->getCustomerInfos($ids);
+        $items = $this->getDB()->getCustomerInfos($this->getShopID(), $ids);
 
         if (!empty($items)) {
             foreach ($items as $item) {

@@ -7,17 +7,23 @@ include_once 'result.php';
 class AFSAApiRequest
 {
     private $api;
-    private $logged;
     private $requested_actions;
 
-    public function __construct()
+    public function __construct($shop_id)
     {
+        $this->shop_id = $shop_id;
+
         if (Tools::getValue('account_id') === AFSAConfig::DEMO_ACCOUNT_ID) {
             AFSAConfig::setDemoMode();
         }
 
         $this->requested_actions = Tools::getValue('actions');
         $this->context = Tools::getValue('context');
+    }
+
+    public function getShopId()
+    {
+        return $this->shop_id;
     }
 
     public function run()

@@ -88,7 +88,10 @@ class AFSAConfigFormManager
 
     public function render()
     {
-        $ret = AFSATools::renderJSData(array('AFSA_site_infos' => AFSAAccountManager::get()->getAccountCreationParams()));
+        $ret = AFSATools::renderTemplate(
+            'script.tpl',
+            ['jsCode' => 'var AFSA_site_infos=' . json_encode(AFSAAccountManager::get()->getAccountCreationParams()) . ';']
+        );
 
         foreach ($this->form as $id => $f) {
             if (empty($f)) {

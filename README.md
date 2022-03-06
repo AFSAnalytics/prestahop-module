@@ -13,3 +13,4 @@ Contributions are always welcome.
 ## Support
 
 Please email `dev@afsanalytics.com`.
+

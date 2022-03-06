@@ -268,17 +268,14 @@ class AFSATracker
 
         //$cms_infos = AFSAConfig::CMS() . ' ' . AFSAConfig::CMSVersion();
 
-        $ret = "\n<!-- AFS Analytics V7 -"
-            . ' Module ' . AFSA_MODULE_VERSION
-            . ' Mode: ' . ($this->advanced_mode ? 'advanced' : 'simple')
-            . " -->\n"
-            . "\n<script data-keepinline=\"true\" type=\"text/javascript\">"
-            . "\n(function(i,s,o,g,r,a,m){i['AfsAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','$js_url','aa');\n"
-            . implode("\n", array_filter($aa))
-            . "\n</script>\n"
-            . "<!-- [ END ] Advanced ECommerce Analytics Code by AFSAnalytics.com -->\n";
-
-        return $this->log($ret);
+        return AFSATools::renderTemplate(
+            'afsa_tag.tpl',
+            [
+                'mode' => $this->advanced_mode ? 'advanced' : 'simple',
+                'jsCode' => "\n(function(i,s,o,g,r,a,m){i['AfsAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','$js_url','aa');\n"
+                    . implode("\n", array_filter($aa)),
+            ]
+        );
     }
 
     /**
@@ -288,26 +285,28 @@ class AFSATracker
      */
     public function renderBottomJS()
     {
-        // only render if we have a valid AFSA Account number
+        $js = null;
+        $status = 'START';
+
         if (!$this->shouldTrack()) {
-            return '<!-- AFS Analytics Bottom Code [ !ST ] -->';
-        }
-
-        if (AFSAConfig::AFSAEnabled()) {
-            if (empty($js = $this->renderBuffer())) {
-                AFSATools::log('empty bottom js');
-
-                return '<!-- AFS Analytics Bottom Code [ Empty ] -->';
+            $status = '!ST';
+        } else {
+            if (AFSAConfig::AFSAEnabled()) {
+                if (empty($js = $this->renderBuffer())) {
+                    $status = 'EMPTY';
+                }
+            } else {
+                $status = '!ENABLED';
             }
-
-            $ret = '<!-- AFS Analytics Bottom Code [ START ] -->' . "\n"
-                . AFSATools::renderJSScript($js)
-                . "<!-- [ END ] Advanced ECommerce Analytics Code by AFSAnalytics.com -->\n";
-
-            return $this->log($ret);
         }
 
-        return '<!-- AFS Analytics Bottom Code [ !Enabled ] -->';
+        return AFSATools::renderTemplate(
+            'afsa_extra.tpl',
+            [
+                'status' => $status,
+                'jsCode' => $js,
+            ]
+        );
     }
 
     /**

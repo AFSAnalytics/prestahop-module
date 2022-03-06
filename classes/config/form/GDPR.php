@@ -38,10 +38,15 @@ class AFSAConfigFormGDPR extends AFSAConfigForm
     {
         $ret = array();
 
-        $gdpr_desc = $this->l('How to set-up analytic.js to comply with the European law on the deposit of cookies.')
-                . ' <a href="https://www.afsanalytics.com/info/144/how-to-set-up-analytic-js-to-comply-with-european-law-about-cookies.html">'
-                . $this->l('Read Guide')
-                . '</a>';
+        $gdpr_desc = AFSATools::renderTemplate(
+            'settings.gdpr.tpl',
+            [
+                'txt' => [
+                    'help' => $this->l('How to set-up analytic.js to comply with the European law on the deposit of cookies.'),
+                    'link' => $this->l('Read Guide'),
+                ],
+            ]
+        );
 
         $ret[]['form'] = array(
             'legend' => array(
@@ -69,7 +74,8 @@ class AFSAConfigFormGDPR extends AFSAConfigForm
                         'id' => 'id',
                         'name' => 'name',
                     ),
-                    'desc' => $gdpr_desc, ),
+                    'desc' => $gdpr_desc,
+                ),
             ),
             'submit' => array(
                 'title' => $this->l('Save'),

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 2019-2021 AFSAnalytics
+ * 2022 AFSAnalytics
  *
  * NOTICE OF LICENSE
  *
@@ -16,14 +16,14 @@
  * DISCLAIMER
  *
  *  @author    AFSAnalytics.com Dev Team <devteam@afsanalytics.com>
- *  @copyright 2021 AFSAnalytics
+ *  @copyright 2022 AFSAnalytics
  *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-define('AFSA_MODULE_VERSION', '1.0.5');
+define('AFSA_MODULE_VERSION', '1.0.7');
 
 include_once 'classes/config/main.php';
 include_once 'classes/db.php';
@@ -46,7 +46,7 @@ class AFSAnalytics extends Module
     {
         $this->name = 'afsanalytics'; // do not change
         $this->tab = 'analytics_stats';
-        $this->version = '1.0.5'; // must be a string
+        $this->version = '1.0.7'; // must be a string
         $this->author = 'AFSAnalytics';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = array(
@@ -54,6 +54,10 @@ class AFSAnalytics extends Module
             'max' => _PS_VERSION_,
         );
         $this->bootstrap = true;
+
+        if (defined('Module::MULTISTORE_COMPATIBILITY_YES')) {
+            $this->multistoreCompatibility = self::MULTISTORE_COMPATIBILITY_YES;
+        }
 
         parent::__construct();
 
@@ -77,6 +81,10 @@ class AFSAnalytics extends Module
 
         if (!parent::install()) {
             return false;
+        }
+
+        if (Shop::isFeatureActive()) {
+            Shop::setContext(Shop::CONTEXT_ALL);
         }
 
         if (_PS_VERSION_ >= 1.7) {
@@ -228,7 +236,7 @@ class AFSAnalytics extends Module
     }
 
     // HOOKS
-    // Backoffice widget
+    // BackOffice widget
     public function hookDashboardZoneTwo()
     {
         if (\AFSARendererAdminWidget::shouldDisplay()) {
@@ -278,17 +286,11 @@ class AFSAnalytics extends Module
 
         $this->context->controller->addJS($this->_path . 'views/js/admin.icon.js');
 
-        $g_fonts = AFSAConfig::get('gfonts');
-        if (!empty($g_fonts)) {
-            $ret .= '<link href="https://fonts.googleapis.com/css?family='
-                . $g_fonts . '" rel="stylesheet" type="text/css">';
-        }
-
-        return $ret
-            . "\n" . AFSATracker::get()->render()
-            . "\n" . '<script>'
-            . 'var afsa_plugin_base_url="' . AFSAConfig::getUrl()
-            . '";</script>';
+        return  AFSATracker::get()->render()
+            . AFSATools::renderTemplate('header.bo.tpl', [
+                'g_fonts' => AFSAConfig::get('gfonts'),
+                'jsCode' => 'var afsa_plugin_base_url="' . AFSAConfig::getUrl() . '";',
+            ]);
     }
 
     // HEADERS
@@ -313,9 +315,7 @@ class AFSAnalytics extends Module
     {
         $this->_onBeforeDisplayedHeader();
 
-        return "\n"
-            //. '<script type="text/javascript" src="' . $this->_path . 'views/js/AFSA.tracker.js"></script>'
-            . AFSATracker::get()->render();
+        return AFSATracker::get()->render();
     }
 
     // PS > 1.7

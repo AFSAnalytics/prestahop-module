@@ -27,13 +27,13 @@ class AFSADB
     public function createTables()
     {
         return $this->batchExecuteSQL(array(
-                    'CREATE TABLE IF NOT EXISTS `' . $this->order_table . '` (
+            'CREATE TABLE IF NOT EXISTS `' . $this->order_table . '` (
 				`id_order` int(11) NOT NULL,
 				`id_shop` int(11) NOT NULL,
 				`date_add` datetime DEFAULT NULL,
 				PRIMARY KEY (`id_order`)
 			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1',
-                    'CREATE TABLE IF NOT EXISTS `' . $this->cart_table . '` (
+            'CREATE TABLE IF NOT EXISTS `' . $this->cart_table . '` (
 				`id_cart` int(11) NOT NULL,
 				`id_shop` int(11) NOT NULL,
 				`data` TEXT DEFAULT NULL,
@@ -45,8 +45,8 @@ class AFSADB
     public function dropTables()
     {
         return $this->batchExecuteSQL(array(
-                    'DROP TABLE IF EXISTS `' . $this->order_table . '`',
-                    'DROP TABLE IF EXISTS `' . $this->cart_table . '`',
+            'DROP TABLE IF EXISTS `' . $this->order_table . '`',
+            'DROP TABLE IF EXISTS `' . $this->cart_table . '`',
         ));
     }
 
@@ -80,14 +80,13 @@ class AFSADB
     public function getCart($id, $shop_id)
     {
         $ret = $this->db->getValue('SELECT data FROM `'
-                . $this->cart_table
-                . '` WHERE id_cart = \'' . $id
-                . '\' AND id_shop = \'' . $shop_id . '\'')
-        ;
+            . $this->cart_table
+            . '` WHERE id_cart = \'' . $id
+            . '\' AND id_shop = \'' . $shop_id . '\'');
 
         return $ret === false ?
-                array() :
-                json_decode($ret, true);
+            array() :
+            json_decode($ret, true);
     }
 
     /**
@@ -105,12 +104,11 @@ class AFSADB
             $json_str = pSQL(json_encode($data));
 
             $q_str = 'INSERT INTO `'
-                    . $this->cart_table . '` (id_cart, id_shop, data) VALUES(\''
-                    . $id . '\',\''
-                    . $shop_id . '\',\''
-                    . $json_str
-                    . '\') ON DUPLICATE KEY UPDATE data=\'' . $json_str . '\' ;'
-            ;
+                . $this->cart_table . '` (id_cart, id_shop, data) VALUES(\''
+                . $id . '\',\''
+                . $shop_id . '\',\''
+                . $json_str
+                . '\') ON DUPLICATE KEY UPDATE data=\'' . $json_str . '\' ;';
 
             AFSATools::log($q_str);
 
@@ -127,9 +125,9 @@ class AFSADB
     public function deleteCart($id, $shop_id)
     {
         $q_str = 'DELETE FROM `'
-                . $this->cart_table
-                . '` WHERE id_cart=\'' . $id
-                . '\' AND id_shop=\'' . $shop_id . '\'';
+            . $this->cart_table
+            . '` WHERE id_cart=\'' . $id
+            . '\' AND id_shop=\'' . $shop_id . '\'';
 
         AFSATools::log($q_str);
 
@@ -184,16 +182,16 @@ class AFSADB
     public function getOrdersForShop($id_shop)
     {
         return $this->db->ExecuteS(
-                        'SELECT * FROM `' . $this->order_table . '`'
-                        . ' WHERE  id_shop = \'' . $id_shop . '\''
-                        . ' AND DATE_ADD(date_add, INTERVAL 30 minute) < NOW()'
+            'SELECT * FROM `' . $this->order_table . '`'
+                . ' WHERE  id_shop = \'' . $id_shop . '\''
+                . ' AND DATE_ADD(date_add, INTERVAL 30 minute) < NOW()'
         );
     }
 
     public function cleanProcessedOrderTable()
     {
         $this->db->Execute(
-                'DELETE FROM ' . $this->order_table . ' WHERE  DATE_ADD(date_add, INTERVAL 7 day) < NOW()'
+            'DELETE FROM ' . $this->order_table . ' WHERE  DATE_ADD(date_add, INTERVAL 7 day) < NOW()'
         );
     }
 
@@ -205,38 +203,35 @@ class AFSADB
 
         foreach ($arr as $v) {
             $ret .= is_string($v) ?
-                    '"' . trim($v) . '"' :
-                    $v;
+                '"' . trim($v) . '"' :
+                $v;
             $ret .= ',';
         }
 
         return '(' . chop($ret, ',') . ')';
     }
 
-    public function getCustomerInfos(array $ids)
+    public function getCustomerInfos($shop_id, array $ids)
     {
         return count($ids) ?
-                $this->db->ExecuteS(
-                        'SELECT T1.id_customer as id, T1.lastname, T1.email, T1.birthday, T2.phone, T2.phone_mobile'
-                        . ' FROM `' . _DB_PREFIX_ . 'customer` AS T1'
-                        . ' LEFT JOIN `' . _DB_PREFIX_ . 'address` AS T2 ON T1.id_customer=T2.id_customer '
-                        . ' WHERE  T1.id_customer in ' . $this->inStatementFromArray($ids)
-                ) :
-                array();
+            $this->db->ExecuteS(
+                'SELECT T1.id_customer as id, T1.lastname, T1.email, T1.birthday, T2.phone, T2.phone_mobile'
+                    . ' FROM `' . _DB_PREFIX_ . 'customer` AS T1'
+                    . ' LEFT JOIN `' . _DB_PREFIX_ . 'address` AS T2 ON T1.id_customer=T2.id_customer '
+                    . ' WHERE T1.id_shop=' . $shop_id . ' AND T1.id_customer in ' . $this->inStatementFromArray($ids)
+            ) :
+            array();
     }
 
     public function getProductsByRef(array $refs)
     {
-        AFSATools::log('SELECT *'
-                . ' FROM `' . _DB_PREFIX_ . 'product` '
-                . ' WHERE reference in ' . $this->inStatementFromArray($refs));
+        $query = 'SELECT * FROM `' . _DB_PREFIX_ . 'product`'
+            . ' WHERE reference in ' . $this->inStatementFromArray($refs);
+
+        AFSATools::log($query);
 
         return count($refs) ?
-                $this->db->ExecuteS(
-                        'SELECT *'
-                        . ' FROM `' . _DB_PREFIX_ . 'product` '
-                        . ' WHERE reference in ' . $this->inStatementFromArray($refs)
-                ) :
-                array();
+            $this->db->ExecuteS($query) :
+            array();
     }
 }

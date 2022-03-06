@@ -17,8 +17,6 @@ class AFSARendererDashboardView
     {
         $this->account_id = AFSAConfig::getAccountID();
         AFSAConfig::set('gfonts', 'Lato:700|Open+sans:500');
-
-        $this->prepareCommonTemplate();
     }
 
     public function initAFSAApi()
@@ -48,37 +46,13 @@ class AFSARendererDashboardView
         ];
     }
 
-    public function prepareCommonTemplate($content = '')
-    {
-        $this->template = $this->renderWidget('topmenubar')
-                . '<div id=afsa_col_infos>'
-                . $this->renderWidget('config')
-                . '</div>'
-                . '<div id=afsa_col_widgets>'
-                . $content
-                . '</div>'
-        ;
-    }
-
-    public function renderWidget($type, $options = null)
-    {
-        $dataset = ' data-type="' . $type . '"';
-        if ($options) {
-            $dataset .= ' data-options=\'' . json_encode($options) . '\'';
-        }
-
-        return '<div class="afsa_requested_widget afsa_widget_' . $type . '"'
-                . $dataset . '>'
-                . '</div>';
-    }
-
     // CONFIG
 
     protected function renderJSConfig()
     {
         $cfg = array(
             'lng' => AFSAConfig::getLNG(),
-            'account_id' => $this->account_id,
+            'account_id' => (int) $this->account_id,
             'server_host' => AFSAConfig::getAFSAAPIHome(),
             'ecom' => array(),
             'ajax' => [
@@ -118,17 +92,7 @@ class AFSARendererDashboardView
         return $cfg;
     }
 
-    protected function renderJSData()
-    {
-        return AFSATools::renderJSData(array('AFSA_dashboard_config' => $this->renderJSConfig(),
-                    's_data' => 1,
-                    's_verif' => 1,
-                    'logo_url' => AFSAConfig::getURL(
-                            'views/img/logo.small.png'),
-        ));
-    }
-
-    public function renderView($params = array())
+    public function renderView()
     {
         AFSAAccountFormRenderer::redirectOnAccountLinked();
 
@@ -140,57 +104,61 @@ class AFSARendererDashboardView
             AFSATools::log('API not logged');
         }
 
-        if (!empty($params['widgets'])) {
-            $this->addWidgets($params['widgets']);
-        }
-
-        $ret = $this->renderJSData();
-
-        foreach (array('d3.min', 'c3.min', 'dashboard') as $n) {
-            $ret .= '<script src=' . AFSAConfig::getAFSAAPIHome() . '/assets/js/common/v2/' . $n . '.js></script>';
-        }
-
-        return
-                $this->renderNotice()
-                . '<div id=afsa_container></div>'
-                . $ret
-                . '<script src="' . AFSAConfig::getURL('/views/js/dashboard.js') . '"></script>'
-        ;
+        return  AFSATools::renderTemplate(
+            'dashboard.tpl',
+            $this->renderTemplateData()
+        );
     }
 
-    private function renderNotice()
+    protected function renderJSData()
     {
-        return AFSAConfig::isDemo() ?
-                '<div id=afsa_demo_notice>'
-                . '<div class=afsa_logo_container>'
-                . '<img class=afsa_logo src=' . AFSAConfig::getURL('views/img/logo.small.png') . '>'
-                . '<div class=afsa_form>'
-                . '<div class="afsa_create_account afsa_button"> ' . AFSAConfig::TR('create_your_own_account') . '</div>'
-                . '</div>'
-                . '</div>'
-                . '<div class=afsa_content>'
-                . '<div class=afsa_headline>'
-                . AFSAConfig::TR('demo_notice_title')
-                . '</div>'
-                . '<div class=afsa_text>'
-                . '<p>' . AFSAConfig::TR('demo_notice_help')
-                . '</p><p>'
-                . AFSAConfig::TR('demo_notice_help_more')
-                . '</p>'
-                . '</div>'
-                . '</div>'
-                . '</div>'
-                . AFSATools::renderJSData(array('AFSA_site_infos' => AFSAAccountManager::get()->getAccountCreationParams())) :
-                null;
+        return AFSATools::renderJSData(array(
+            'AFSA_dashboard_config' => $this->renderJSConfig(),
+            's_data' => 1,
+            's_verif' => 1,
+            'logo_url' => AFSAConfig::getURL(
+                'views/img/logo.small.png'
+            ),
+        ), false);
+    }
+
+    private function renderTemplateData()
+    {
+        return [
+            'is_demo' => AFSAConfig::isDemo(),
+            'img' => [
+                'logo' => AFSAConfig::getURL('views/img/logo.small.png'),
+            ],
+            'txt' => [
+                'create_your_own_account' => AFSAConfig::TR('create_your_own_account'),
+                'demo_notice_title' => AFSAConfig::TR('demo_notice_title'),
+                'demo_notice_help' => AFSAConfig::TR('demo_notice_help'),
+                'demo_notice_help_more' => AFSAConfig::TR('demo_notice_help_more'),
+            ],
+            'url' => [
+                'api_home' => AFSAConfig::getAFSAAPIHome(),
+                'js_dashboard' => AFSAConfig::getURL('/views/js/dashboard.js'),
+            ],
+            'script' => [
+                'dashboard' => array('d3.min', 'c3.min', 'dashboard'),
+            ],
+            'widget' => [
+                'info' => false,
+            ],
+            'jsCode' => [
+                'dashboard' => $this->renderJSData(),
+                'demo' => 'var AFSA_site_infos=' . json_encode(AFSAAccountManager::get()->getAccountCreationParams()) . ';',
+            ],
+        ];
     }
 
     // INTRO
 
     private function renderIntro()
     {
-        return '<div class=afsa_intro_container>'
-                . AFSAAccountFormRenderer::renderAccountForm()
-                . AFSAAccountFormRenderer::renderDemoForm()
-                . '</div>';
+        return AFSATools::renderTemplate(
+            'intro.dashboard.tpl',
+            AFSAAccountFormRenderer::getTemplateData()
+        );
     }
 }

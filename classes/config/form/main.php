@@ -78,7 +78,8 @@ class AFSAConfigFormMain extends AFSAConfigForm
                 'id' => 'active_off',
                 'value' => 0,
                 'label' => $this->l('Disabled'),
-            ), );
+            ),
+        );
 
         $ret[]['form'] = array(
             'legend' => array(
@@ -90,10 +91,15 @@ class AFSAConfigFormMain extends AFSAConfigForm
                     'label' => $this->l('Website ID'),
                     'name' => 'afs_analytics_account',
                     'hint' => $this->l('Your AFS Analytics Website ID'),
-                    'desc' => '<div class="afsa_create_account">'
-                    . $this->l('Create an AFS Analytics account')
-                    . '</div> '
-                    . $this->l('to get one'),
+                    'desc' => AFSATools::renderTemplate(
+                        'settings.create.account.tpl',
+                        [
+                            'txt' => [
+                                'create' => $this->l('Create an AFS Analytics account'),
+                                'more' => $this->l('to get one'),
+                            ],
+                        ]
+                    ),
                     'size' => 20,
                     'class' => 'input fixed-width-xl',
                     'required' => true,
@@ -103,9 +109,15 @@ class AFSAConfigFormMain extends AFSAConfigForm
                     'label' => $this->l('Access Key'),
                     'name' => 'afs_analytics_accesskey',
                     'hint' => 'An Access key allow you to access your AFS Analytics Dashboard without providing a password each time ',
-                    'desc' => '<div class="afsa_warpto" data-target="_blank" data-to="' . AFSARouteManager::keys() . '">'
-                    . $this->l('Create one')
-                    . '</div>',
+                    'desc' => AFSATools::renderTemplate(
+                        'settings.key.tpl',
+                        [
+                            'url' => AFSARouteManager::keys(),
+                            'txt' => [
+                                'create' => $this->l('Create one'),
+                            ],
+                        ]
+                    ),
                     'size' => 20,
                     'class' => 'input fixed-width-xl',
                     'required' => false,
@@ -133,7 +145,7 @@ class AFSAConfigFormMain extends AFSAConfigForm
                     'name' => 'afs_analytics_user_logged_tracking',
                     'values' => $radioOptions,
                     'hint' => $this->l('Track user information like name and email'),
-      //              'desc' => $this->l('Note: A premium AFS Analytis subscription is needed for tracking customer\'s full profile.'),
+                    //              'desc' => $this->l('Note: A premium AFS Analytis subscription is needed for tracking customer\'s full profile.'),
                 ),
 
                 array(

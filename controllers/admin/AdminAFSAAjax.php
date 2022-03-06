@@ -11,7 +11,9 @@ class AdminAFSAAjaxController extends ModuleAdminController
         try {
             parent::init();
 
-            $request = new AFSAApiRequest();
+            $shop_id = (int) Context::getContext()->shop->id;
+
+            $request = new AFSAApiRequest($shop_id);
             $json = json_encode($request->run());
         } catch (\Exception $e) {
             $json = json_encode(['error' => $e->getMessage()]);

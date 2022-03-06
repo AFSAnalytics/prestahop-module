@@ -40,32 +40,31 @@ class AFSARendererAdminWidgetDashboard extends AFSARendererDashboardView
             AFSATools::log('API not logged');
 
             return '';
-            /*
-              return '<section id=afsa_dashboard class="afsa_main afsa_bo_dashboard">'
-              . '<div style="display: flex;align-items: center;" class=afsa_notice >'
-              . '<img style="flex: 0 0 auto;margin-right:30px;"  class=afsa_logo src='
-              . AFSAConfig::getURL('/views/img/logo.small.png') . '>'
-              . '<div style="flex: 0 0 auto;max-width: 60%;" class=afsa_help>'
-              . AFSAConfig::TR('days_trends_help')
-              . ' <a href="' . AFSAConfig::getDashboardURL() . '">'
-              . AFSAConfig::TR('dashboard')
-              . '.</a>'
-              . '</div></duv>'
-              . '</section>';
-             */
         }
 
-        $ret = $this->renderJSData();
+        return  AFSATools::renderTemplate(
+            'dashboard.bo.tpl',
+            $this->renderTemplateData()
+        );
+    }
 
-        foreach (array('dashboard') as $n) {
-            $ret .= '<script src=' . AFSAConfig::getAFSAAPIHome() . '/assets/js/common/v2/' . $n . '.js></script>';
-        }
-
-        return '<section id=afsa_dashboard class="afsa_main afsa_bo_dashboard">'
-                . $this->renderWidget('Overview')
-                . '</section>'
-                . $ret
-                . '<script src="' . AFSAConfig::getURL('/views/js/admin.widget.js') . '"></script>'
-        ;
+    private function renderTemplateData()
+    {
+        return [
+            'url' => [
+                'api_home' => AFSAConfig::getAFSAAPIHome(),
+                'js_dashboard' => AFSAConfig::getURL('/views/js/admin.widget.js'),
+            ],
+            'script' => [
+                'dashboard' => array('d3.min', 'c3.min', 'dashboard'),
+            ],
+            'widget' => [
+                'info' => false,
+            ],
+            'jsCode' => [
+                'dashboard' => $this->renderJSData(),
+                'demo' => 'var AFSA_site_infos=' . json_encode(AFSAAccountManager::get()->getAccountCreationParams()) . ';',
+            ],
+        ];
     }
 }

@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{afsanalytics}prestashop>afsanalytics_7459d6e026bb103b0db6f08c9509edd9'] = ' AFS Analytics';
+$_MODULE['<{afsanalytics}prestashop>afsanalytics_7459d6e026bb103b0db6f08c9509edd9'] = 'AFS Analytics';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_6ae745299a4ea3e1fdb9257973662489'] = 'Intégrez l\'une des meilleures solutions de mesure d\'audience en temps réel et d’analyse comportementale à  votre boutique prestashop. Développé par AFS Analytics, acteur clé du marketing digital.';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_876f23178c29dc2552c0b48bf23cd9bd'] = 'Etes vous bien certain de vouloir supprimer ce module?';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_d8d21ad4aeb0f8f8eff3a381095198d1'] = 'Impossible d\'obtenir l\'autorisation d\'un serveur AFS Analytics.';
@@ -18,7 +18,7 @@ $_MODULE['<{afsanalytics}prestashop>afsanalytics_68f7b08362e45c1fe72b0b6de40eeaf
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_ba7a1bdbe3f994c140e82e4023f6ce6f'] = 'Ou démarrez votre période d\'essai  gratuit de 15 jours et découvrez sans attendre les multiples avantages de notre  solution analytique spéciale commerce électronique.';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_54e4455ada09db1a9f79f749822a4a5a'] = 'Démo';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_d226cb6cc272e8d8a80d62b615c24e94'] = 'Expérimentez la puissance de la solution AFS Analytics  grace à notre démo temps réel. Pas de compte requis.';
-$_MODULE['<{afsanalytics}prestashop>afsanalytics_409a5ff87d579da2058cddfca6b5deea'] = 'Configurez votre module AFS Analytics en un click';
+$_MODULE['<{afsanalytics}prestashop>afsanalytics_409a5ff87d579da2058cddfca6b5deea'] = 'Configurez votre module AFS Analytics en un clic';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_78c7efbfa07116553a52f59800129dde'] = 'Bénéficier de l\'essai gratuit';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_1566036cad6b0131028945e6b1fd0e05'] = ' Ce tableau de bord affiche en temps réel l\'activité d\'un site test utilisant prestahop.';
 $_MODULE['<{afsanalytics}prestashop>afsanalytics_d20243c79ac4e64b521f7eaf0fecd5f4'] = 'Pour visualiser les données de votre boutique en ligne, il est nécessaire d\'ouvrir votre propre compte';

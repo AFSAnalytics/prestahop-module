@@ -93,9 +93,6 @@ class AFSAAccountController
             return;
         }
 
-        if (!empty($r['afsa_trial_type'])) {
-            $account->setTrial($r['afsa_trial_type'], empty($r['afsa_trial_period']) ? 0 : $r['afsa_trial_period']);
-        }
         $account->save();
 
         $this->onAccountSet($id);
@@ -105,7 +102,7 @@ class AFSAAccountController
 
     private function onAccountSet($id)
     {
-        // Initiate api login since user is authentified
+        // Initiate api login since user is authenticated
         if ($this->api_auto_login) {
             $api = new AFSAApi(array('account_id' => $id, 'callback_url' => AFSAConfig::getAccountManagerURL(array('afsa_action' => 'api_initial_login'))));
             $api->login();
@@ -116,39 +113,25 @@ class AFSAAccountController
 
     public function renderWelcome()
     {
-        return $this->output = '<script>'
-                . "document.cookie = 'afssetuser=0;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/';\n"
-                . '</script>'
-
-                . '<div class=afsa_welcome_container>'
-                . '<div class=afsa_content>'
-                . '<div class=afsa_header>'
-                . '<div class=afsa_title>'
-                . '<img class=afsa_logo src=' . AFSAConfig::getURL('views/img/logo.small.png') . '>'
-                . '<div class=afsa_label>' . AFSAConfig::TR('congratulations') . '!</div>'
-                . '</div>'
-                . '<div class=afsa_headline>'
-                . AFSAConfig::TR('module_configured')
-                . '</div>'
-                . '</div>'
-                . '<p>' . AFSAConfig::TR('module_working') . '</p>'
-                . '<p>' . AFSAConfig::TR('account_id_available') . '</p>'
-                . '<div class=afsa_footer>'
-                . '<div class=afsa_thanks>' . AFSAConfig::TR('thanks_using_afsa') . '</div>'
-                . '</div>'
-                . '<div class=afsa_button_bar>'
-                . '<a href="' . AFSAConfig::getConfigControllerURL() . '" '
-                . ' class="afsa_button">'
-                . AFSAConfig::tr('advanced_configuration')
-                . '</a>'
-                . '<a href="' . AFSAConfig::getDashboardURL() . '" '
-                . ' class="afsa_button afsa_open">'
-                . AFSAConfig::TR('open_dashboard')
-                . '</a>'
-                . '<a href="' . AFSARouteManager::getDashboardURL() . '" '
-                . ' class="afsa_button">' . AFSAConfig::tr('visit_afsa') . '</a>'
-                . '</div>'
-                . '</div>' // afsa_content
-                . '</div>'; // container
+        return $this->output = AFSATools::renderTemplate(
+            'welcome.tpl',
+            [
+                'logo' => AFSAConfig::getURL('views/img/logo.small.png'),
+                'txt' => [
+                    'congratulations' => AFSAConfig::TR('congratulations'),
+                    'module_configured' => AFSAConfig::TR('module_configured'),
+                    'module_working' => AFSAConfig::TR('module_working'),
+                    'account_id_available' => AFSAConfig::TR('account_id_available'),
+                    'thanks_using_afsa' => AFSAConfig::TR('thanks_using_afsa'),
+                    'advanced_configuration' => AFSAConfig::tr('advanced_configuration'),
+                    'open_dashboard' => AFSAConfig::TR('open_dashboard'),
+                    'visit_afsa' => AFSAConfig::tr('visit_afsa'),
+                ],
+                'url' => [
+                    'config' => AFSAConfig::getConfigControllerURL(),
+                    'dashboard' => AFSAConfig::getDashboardURL(),
+                ],
+            ]
+        );
     }
 }

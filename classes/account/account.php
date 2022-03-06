@@ -30,7 +30,7 @@ class AFSAAccount
 
     public function advancedEComEnabled()
     {
-        return $this->getPlanID() == 4;
+        return $this->ecomEnabled();
     }
 
     public function ecomEnabled()

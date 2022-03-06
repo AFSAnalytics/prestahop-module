@@ -11,7 +11,7 @@ class AFSATools
      *
      * @return string js code
      */
-    public static function renderJSData(array $arr)
+    public static function renderJSData(array $arr, $script = true)
     {
         $js = '';
 
@@ -27,14 +27,18 @@ class AFSATools
             }
         }
 
-        return static::renderJSSCript($js);
+        return $js;
     }
 
-    public static function renderJSScript($js)
+    public static function renderTemplate($name, $values)
     {
-        return empty($js) ?
-            '' :
-            "<script>\n$js\n</script>\n";
+        $context = AFSAConfig::getContext();
+        $context->smarty->assign($values);
+
+        return AFSAConfig::$module->display(
+            AFSAConfig::pluginPath(),
+            $name
+        );
     }
 
     private static function renderDebugMessage($str, $data)
@@ -52,7 +56,7 @@ class AFSATools
     public static function log($str, $data = null)
     {
         if (!AFSAConfig::isDebug()) {
-            return;
+            return null;
         }
 
         $msg = static::renderDebugMessage($str, $data);
@@ -63,15 +67,9 @@ class AFSATools
 
     public static function forcedLog($str, $data = null)
     {
-        /*
-        if (!AFSAConfig::isDebug()) {
-            return;
-        }
+        $msg = static::log($str, $data);
 
-        $msg = static::renderDebugMessage($str, $data);
-        error_log($msg);
-        echo '<pre>' . $msg . '</pre>';
-        */
+        return $msg;
     }
 
     public static function jsEscape($string)
@@ -140,8 +138,8 @@ class AFSATools
             if (!empty($_SERVER)) {
                 $ret = [];
                 foreach ($_SERVER as $k => $v) {
-                    if (substr($k, 0, 5) == 'HTTP_') {
-                        $ret[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($k, 5)))))] = $v;
+                    if (Tools::substr($k, 0, 5) == 'HTTP_') {
+                        $ret[str_replace(' ', '-', ucwords(Tools::strtolower(str_replace('_', ' ', Tools::substr($k, 5)))))] = $v;
                     }
                 }
 

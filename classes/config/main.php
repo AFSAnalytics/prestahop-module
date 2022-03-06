@@ -32,6 +32,13 @@ class AFSAConfig
         return 'afsanalytics';
     }
 
+    public static function pluginPath()
+    {
+        print_r(static::$module->getLocalPath(), static::$module->name);
+
+        return static::$module->getLocalPath() . static::$module->name;
+    }
+
     public static function getContext()
     {
         return static::$module->getContext();
@@ -112,9 +119,8 @@ class AFSAConfig
     public static function pluginURL($u = null)
     {
         return chop(_MODULE_DIR_ . static::pluginName(), '/')
-                . '/'
-                . ($u ? $u : '')
-        ;
+            . '/'
+            . ($u ? $u : '');
     }
 
     public static function getIMGServerURL()
@@ -132,8 +138,8 @@ class AFSAConfig
     public static function getConfigControllerURL()
     {
         return static::getContext()->link->getAdminLink('AdminModules')
-                . '&configure='
-                . Tools::safeOutput(AFSAConfig::pluginName());
+            . '&configure='
+            . Tools::safeOutput(AFSAConfig::pluginName());
     }
 
     public static function getCurrentScheme()
@@ -144,9 +150,8 @@ class AFSAConfig
     public static function getCurrentURL()
     {
         return static::getCurrentScheme()
-                . '://' . $_SERVER['HTTP_HOST']
-                . $_SERVER['REQUEST_URI']
-        ;
+            . '://' . $_SERVER['HTTP_HOST']
+            . $_SERVER['REQUEST_URI'];
     }
 
     public static function getAJAXServerURL()
@@ -209,9 +214,8 @@ class AFSAConfig
         $ret = Configuration::get('AFS_ANALYTICS_SHOP_AFFILIATION');
 
         return $ret ?
-                $ret :
-                'Prestashop'
-        ;
+            $ret :
+            'Prestashop';
     }
 
     public static function getAccessKey()
@@ -222,8 +226,8 @@ class AFSAConfig
     public static function getAccountID()
     {
         return static::isDemo() ?
-                static::DEMO_ACCOUNT_ID :
-                static::getStringOption('account');
+            static::DEMO_ACCOUNT_ID :
+            static::getStringOption('account');
     }
 
     public static function advancedECommerceEnabled()
@@ -393,8 +397,8 @@ class AFSAConfig
         $context = static::getContext();
 
         return empty($context->cookie->afsa_product_list) ?
-                'product page' :
-                $context->cookie->afsa_product_list;
+            'product page' :
+            $context->cookie->afsa_product_list;
     }
 
     public static function setRefundedOrder($data)
@@ -414,8 +418,8 @@ class AFSAConfig
         $context = static::getContext();
 
         return empty($context->cookie->afsa_admin_refund) ?
-                array() :
-                json_decode($context->cookie->afsa_admin_refund, true);
+            array() :
+            json_decode($context->cookie->afsa_admin_refund, true);
     }
 
     public static function resetRefundedOrders()
