@@ -75,14 +75,14 @@ class AFSARendererDashboardView
             $cfg['access_key'] = $access_key;
         }
 
-        if (AFSAConfig::advancedECommerceEnabled()) {
-            $cfg['ecom'] = array(
-                'enabled' => 1,
-                'level' => 'advanced',
-                'currency' => AFSAConfig::getGlobalCurrencyCode(),
-            );
+        $cfg['ecom'] = array(
+            'enabled' => 1,
+            'level' => 'limited',
+            'currency' => AFSAConfig::getGlobalCurrencyCode(),
+        );
 
-            $cfg['dashboard']['container']['template'] = 'ecom';
+        if (AFSAConfig::advancedECommerceEnabled()) {
+            $cfg['ecom']['level'] = 'advanced';
         }
 
         if (AFSAConfig::isDemo()) {
